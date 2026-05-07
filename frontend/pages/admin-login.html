@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login RH - Tecnosonda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/login.css" />
+</head>
+<body>
+  <div class="login-page">
+    <aside class="login-side-visual">
+      <div class="login-brand">
+        <div class="login-brand-mark"><img src="/assets/logo-tecnosonda-symbol.png" alt="Logo Tecnosonda"></div>
+        <div class="login-brand-text">TECNOSONDA</div>
+      </div>
+
+      <div class="login-pitch">
+        <h1>Plataforma corporativa de admissão digital</h1>
+        <p>
+          Gerencie processos admissionais com agilidade, segurança e total
+          rastreabilidade.
+        </p>
+      </div>
+
+      <div class="login-features">
+        <div class="login-feature">
+          <span class="login-feature-icon">✓</span>
+          Processo 100% digital, sem papel
+        </div>
+        <div class="login-feature">
+          <span class="login-feature-icon">✓</span>
+          Documentos armazenados em nuvem com segurança
+        </div>
+        <div class="login-feature">
+          <span class="login-feature-icon">✓</span>
+          Acesso individual e auditável por colaborador
+        </div>
+      </div>
+    </aside>
+
+    <section class="login-side-form">
+      <div class="login-form-container">
+        <a href="/" class="login-back-link">← Voltar para início</a>
+        <h2>Acesso Administrativo</h2>
+        <p>Entre com suas credenciais para acessar o painel.</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label class="form-label" for="email">E-mail</label>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="seu.email@tecnosonda.com.br"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Senha</label>
+            <input
+              type="password"
+              id="password"
+              class="form-input"
+              placeholder="Digite sua senha"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnSubmit">
+            Entrar no painel
+          </button>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script>
+    if (localStorage.getItem('admin_token')) {
+      Api.get('/auth/me')
+        .then(() => window.location.href = '/admin/dashboard')
+        .catch(() => localStorage.removeItem('admin_token'));
+    }
+
+    const form = document.getElementById('loginForm');
+    const btn = document.getElementById('btnSubmit');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Entrando...';
+
+      try {
+        const data = await Api.post('/auth/login', { email, password });
+        localStorage.setItem('admin_token', data.token);
+        localStorage.setItem('admin_user', JSON.stringify(data.admin));
+        Toast.success('Login realizado!');
+        setTimeout(() => window.location.href = '/admin/dashboard', 400);
+      } catch (err) {
+        Toast.error(err.message || 'Falha ao autenticar.');
+        btn.disabled = false;
+        btn.textContent = 'Entrar no painel';
+      }
+    });
+  </script>
+</body>
+</html>

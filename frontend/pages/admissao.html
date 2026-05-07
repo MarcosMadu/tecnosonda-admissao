@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Admissão - Tecnosonda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/admission.css" />
+</head>
+<body>
+  <div class="admission-page">
+    <header class="admission-header">
+      <div class="admission-header-brand">
+        <div class="admission-header-brand-mark"><img src="/assets/logo-tecnosonda-symbol.png" alt="Logo Tecnosonda"></div>
+        <div class="admission-header-info">
+          <strong>TECNOSONDA</strong>
+          <small>Auto Admissão Digital</small>
+        </div>
+      </div>
+      <div id="headerStatus"></div>
+    </header>
+
+    <div class="admission-container" id="container">
+      <div style="text-align:center; padding:80px 20px;">
+        <div class="spinner spinner-dark" style="width:48px; height:48px; border-width:4px; margin:0 auto;"></div>
+        <p style="margin-top:16px; color:var(--gray-600);">Carregando seu formulário...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/admission.js"></script>
+</body>
+</html>
