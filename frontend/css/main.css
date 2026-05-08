@@ -5,13 +5,13 @@
 
 :root {
   /* Cores corporativas */
-  --primary: #0052cc;
-  --primary-dark: #003d99;
-  --primary-light: #e6f0ff;
-  --primary-hover: #0747a6;
+  --primary: #0E6B36;
+  --primary-dark: #0A5229;
+  --primary-light: #E7F6ED;
+  --primary-hover: #0C5E30;
 
-  --secondary: #1e3a8a;
-  --accent: #00b8d9;
+  --secondary: #14532D;
+  --accent: #14A44D;
 
   /* Status */
   --success: #00875a;
@@ -202,7 +202,7 @@ input, select, textarea { font-family: inherit; }
 .form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+  box-shadow: 0 0 0 3px rgba(14, 107, 54, 0.15);
 }
 .form-input:disabled {
   background: var(--gray-100);
