@@ -9,9 +9,7 @@ const REQUIRED_DOCUMENTS = [
   { type: 'pis_pasep', label: 'PIS/PASEP' },
   { type: 'escolaridade', label: 'Escolaridade' },
   { type: 'certidao_casamento_nascimento', label: 'Certidão de Casamento/Nascimento' },
-  { type: 'bilhete_unico', label: 'Bilhete Único' },
   { type: 'conta_bancaria', label: 'Conta Bancária' },
-  { type: 'atestado_medico', label: 'Atestado Médico Admissional' },
   { type: 'carteira_vacinacao', label: 'Carteira de Vacinação' },
 ];
 
