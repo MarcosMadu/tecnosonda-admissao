@@ -29,7 +29,7 @@
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-md);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 3px 8px rgba(0, 82, 204, 0.10);
+  box-shadow: 0 3px 10px rgba(14, 107, 54, 0.15);
 }
 .sidebar-brand-text {
   font-weight: 700;
@@ -219,7 +219,7 @@
 .search-input input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
+  box-shadow: 0 0 0 3px rgba(14, 107, 54, 0.15);
 }
 .search-input::before {
   content: '🔍';
@@ -335,7 +335,7 @@
   background: var(--white);
   padding: 6px 10px;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(0, 82, 204, 0.15);
+  border: 1px solid rgba(14, 107, 54, 0.15);
 }
 
 /* Lista de documentos no detalhe RH */
