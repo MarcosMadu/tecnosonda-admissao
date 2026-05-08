@@ -9,7 +9,7 @@ const REQUIRED_DOCUMENTS = [
   { type: 'pis_pasep', label: 'PIS/PASEP' },
   { type: 'escolaridade', label: 'Escolaridade' },
   { type: 'certidao_casamento_nascimento', label: 'Certidão de Casamento/Nascimento' },
-  { type: 'conta_bancaria', label: 'Conta Bancária' },
+  { type: 'conta_bancaria', label: 'Conta Bancária (Itaú/Bradesco)' },
   { type: 'carteira_vacinacao', label: 'Carteira de Vacinação' },
 ];
 
@@ -18,6 +18,7 @@ const OPTIONAL_DOCUMENTS = [
   { type: 'dependentes', label: 'Dependentes' },
   { type: 'declaracao_escolar_filhos', label: 'Declaração Escolar dos Filhos' },
   { type: 'carteira_vacinacao_filhos', label: 'Carteira Vacinação dos Filhos' },
+  { type: 'carteira_profissional_crea_mte_cft', label: 'Carteira profissional-(CREA-MTE-CFT)' },
 ];
 
 const ALL_DOCUMENTS = [...REQUIRED_DOCUMENTS, ...OPTIONAL_DOCUMENTS];
