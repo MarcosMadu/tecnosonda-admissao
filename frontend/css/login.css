@@ -8,7 +8,7 @@
 
 .login-side-visual {
   background:
-    linear-gradient(135deg, rgba(0, 82, 204, 0.95) 0%, rgba(30, 58, 138, 0.95) 100%),
+    linear-gradient(135deg, rgba(14, 107, 54, 0.96) 0%, rgba(10, 82, 41, 0.96) 100%),
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='20' height='20'><circle cx='10' cy='10' r='1' fill='white' opacity='.3'/></pattern></defs><rect width='100' height='100' fill='url(%23a)'/></svg>");
   color: var(--white);
   padding: 60px;
@@ -23,7 +23,7 @@
   position: absolute;
   top: -50%; right: -30%;
   width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(0, 184, 217, 0.3), transparent 70%);
+  background: radial-gradient(circle, rgba(20, 164, 77, 0.25), transparent 70%);
   border-radius: 50%;
 }
 
