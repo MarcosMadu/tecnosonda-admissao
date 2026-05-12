@@ -19,6 +19,7 @@ const OPTIONAL_DOCUMENTS = [
   { type: 'declaracao_escolar_filhos', label: 'Declaração Escolar dos Filhos' },
   { type: 'carteira_vacinacao_filhos', label: 'Carteira Vacinação dos Filhos' },
   { type: 'carteira_profissional_crea_mte_cft', label: 'Carteira profissional-(CREA-MTE-CFT)' },
+  { type: 'CNH', label: 'CNH)' },
 ];
 
 const ALL_DOCUMENTS = [...REQUIRED_DOCUMENTS, ...OPTIONAL_DOCUMENTS];
