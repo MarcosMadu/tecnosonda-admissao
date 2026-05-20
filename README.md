@@ -223,3 +223,4 @@ O sistema é stateless e roda em qualquer plataforma Node.js (Render, Railway, H
 ## 📝 Licença
 
 © Tecnosonda — Todos os direitos reservados.
+Desenvolvimento: Marcos Augusto
