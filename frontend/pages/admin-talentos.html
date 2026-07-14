@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banco de Talentos - Tecnosonda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <link rel="stylesheet" href="/css/talentos.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-mark"><img src="/assets/logo-tecnosonda-symbol.png" alt="Logo Tecnosonda"></div>
+        <div class="sidebar-brand-text">
+          TECNOSONDA
+          <small>Painel RH</small>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-title">Menu</div>
+        <a href="/admin/dashboard" class="sidebar-link">
+          <span class="sidebar-link-icon">📋</span>
+          Admissões
+        </a>
+        <a href="/admin/talentos" class="sidebar-link active">
+          <span class="sidebar-link-icon">🎯</span>
+          Banco de Talentos
+        </a>
+        <a href="/vagas" target="_blank" class="sidebar-link">
+          <span class="sidebar-link-icon">🔗</span>
+          Portal de vagas
+        </a>
+        <a href="/" class="sidebar-link">
+          <span class="sidebar-link-icon">🏠</span>
+          Página inicial
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-user-avatar" id="userAvatar">??</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name" id="userName">-</div>
+            <div class="sidebar-user-email" id="userEmail">-</div>
+          </div>
+          <button class="btn-icon btn-ghost" id="btnLogout" title="Sair">⏻</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <div class="main-header-title">
+          <h1>Banco de Talentos</h1>
+          <p>Abra vagas, receba currículos e inicie a auto admissão</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary" id="btnCopyPortal">🔗 Copiar link do portal</button>
+          <button class="btn btn-primary" id="btnNewJob"><span>+</span> Abrir Vaga</button>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="tabs" id="tabs">
+          <button class="tab active" data-tab="candidatos">Candidatos</button>
+          <button class="tab" data-tab="vagas">Vagas</button>
+          <button class="tab" data-tab="estatisticas">Estatísticas</button>
+        </div>
+
+        <!-- ============ ABA CANDIDATOS ============ -->
+        <section class="tab-panel active" id="panel-candidatos">
+          <div class="filters-bar">
+            <div class="search-input">
+              <input type="text" id="searchCandidato" placeholder="Buscar por nome, e-mail, telefone, vaga..." />
+            </div>
+            <select class="form-select" id="jobFilter" style="width:auto; max-width:260px;">
+              <option value="">Todas as vagas</option>
+            </select>
+            <select class="form-select" id="statusFilter" style="width:auto; max-width:220px;">
+              <option value="">Todos os status</option>
+              <option value="recebido">Currículo recebido</option>
+              <option value="em_analise">Em análise</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="reprovado">Reprovado</option>
+            </select>
+            <button class="btn btn-secondary" id="btnRefresh">Atualizar</button>
+          </div>
+
+          <div class="data-table">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Candidato</th>
+                    <th>Vaga</th>
+                    <th>Idade / Sexo</th>
+                    <th>Contato</th>
+                    <th>Status</th>
+                    <th>Recebido em</th>
+                    <th style="text-align:right;">Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="candidatesTbody">
+                  <tr><td colspan="7" style="padding:40px; text-align:center; color:var(--gray-600);">Carregando...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ ABA VAGAS ============ -->
+        <section class="tab-panel" id="panel-vagas">
+          <div class="jobs-grid" id="jobsGrid">
+            <div style="padding:40px; text-align:center; color:var(--gray-600);">Carregando...</div>
+          </div>
+        </section>
+
+        <!-- ============ ABA ESTATÍSTICAS ============ -->
+        <section class="tab-panel" id="panel-estatisticas">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Candidatos por função</div>
+            </div>
+            <div class="card-body" id="chartFuncao">
+              <div style="color:var(--gray-600);">Carregando...</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <div class="card-header">
+              <div class="card-title">Candidatos por status</div>
+            </div>
+            <div class="card-body" id="chartStatus">
+              <div style="color:var(--gray-600);">Carregando...</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/utils.js"></script>
+  <script src="/js/talentos.js"></script>
+</body>
+</html>
