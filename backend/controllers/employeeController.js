@@ -340,15 +340,13 @@ exports.uploadDocument = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
     }
-    if (!documentType || !isValidType(documentType)) {
-      // limpa arquivo já enviado ao Cloudinary
-      if (req.file.filename) {
-        const resourceType =
-          req.file.mimetype === 'application/pdf' ? 'raw' : 'image';
-        await cloudinary.uploader
-          .destroy(req.file.filename, { resource_type: resourceType })
-          .catch(() => {});
-      }
+    // Adicione a validação no uploadDocument
+if (!isValidMimeType(docType, req.file.mimetype)) {
+  const accepted = getAcceptedFormats(docType);
+  return res.status(400).json({
+    message: `Formato inválido. Aceitos: ${accepted.join(', ').toUpperCase()}`
+  });
+}
       return res.status(400).json({ message: 'Tipo de documento inválido.' });
     }
 
