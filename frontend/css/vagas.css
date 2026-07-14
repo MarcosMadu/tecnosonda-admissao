@@ -1,0 +1,254 @@
+/* ============ PORTAL PÚBLICO DE VAGAS ============ */
+
+body {
+  background: var(--gray-50);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden { display: none !important; }
+
+/* Header */
+.vagas-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-xs);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.vagas-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vagas-brand img { height: 34px; display: block; }
+
+.vagas-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* Hero */
+.vagas-hero {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: var(--white);
+  text-align: center;
+  padding: 56px 24px;
+}
+
+.vagas-hero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.vagas-hero p {
+  font-size: 1rem;
+  opacity: 0.92;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+
+/* Container */
+.vagas-container {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 20px;
+}
+
+/* Lista de vagas */
+.vagas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.vaga-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-xs);
+  transition: all var(--transition);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vaga-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--primary-light);
+}
+
+.vaga-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.vaga-card-head h3 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.vaga-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+}
+
+.vaga-card-desc {
+  font-size: 0.875rem;
+  color: var(--gray-700);
+  line-height: 1.55;
+}
+
+.vaga-card-req {
+  font-size: 0.8125rem;
+  color: var(--gray-700);
+  background: var(--gray-50);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+.vaga-card .btn { margin-top: auto; }
+
+.vagas-loading,
+.vagas-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--gray-600);
+  background: var(--white);
+  border: 1px dashed var(--gray-300);
+  border-radius: var(--radius-lg);
+}
+
+.vagas-loading { display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+/* Formulário */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* Upload */
+.upload-box {
+  display: block;
+  text-align: center;
+  padding: 28px 20px;
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius-lg);
+  background: var(--gray-50);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.upload-box:hover,
+.upload-box.dragging {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.upload-box.filled {
+  border-color: var(--success);
+  border-style: solid;
+  background: var(--success-light);
+}
+
+.upload-icon { font-size: 1.75rem; margin-bottom: 8px; }
+
+.upload-text {
+  font-size: 0.9375rem;
+  color: var(--gray-800);
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+
+/* Sucesso */
+.success-box {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  padding: 56px 32px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.success-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: var(--success-light);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.success-box h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 10px;
+}
+
+.success-box p {
+  color: var(--gray-700);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Footer */
+.vagas-footer {
+  background: var(--white);
+  border-top: 1px solid var(--gray-200);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+}
+
+@media (max-width: 640px) {
+  .vagas-hero { padding: 40px 20px; }
+  .vagas-hero h1 { font-size: 1.5rem; }
+  .vagas-list { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
