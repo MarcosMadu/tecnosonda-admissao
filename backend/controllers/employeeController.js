@@ -7,7 +7,9 @@ const {
   OPTIONAL_DOCUMENTS,
   ALL_DOCUMENTS,
   getLabelByType,
+  getAcceptedFormats,
   isValidType,
+  isValidMimeType,
   isRequired,
 } = require('../services/documentsCatalog');
 
@@ -340,13 +342,15 @@ exports.uploadDocument = async (req, res, next) => {
     if (!req.file) {
       return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
     }
-    // Adicione a validação no uploadDocument
-if (!isValidMimeType(docType, req.file.mimetype)) {
-  const accepted = getAcceptedFormats(docType);
-  return res.status(400).json({
-    message: `Formato inválido. Aceitos: ${accepted.join(', ').toUpperCase()}`
-  });
-}
+    if (!documentType || !isValidType(documentType)) {
+      // limpa arquivo já enviado ao Cloudinary
+      if (req.file.filename) {
+        const resourceType =
+          req.file.mimetype === 'application/pdf' ? 'raw' : 'image';
+        await cloudinary.uploader
+          .destroy(req.file.filename, { resource_type: resourceType })
+          .catch(() => {});
+      }
       return res.status(400).json({ message: 'Tipo de documento inválido.' });
     }
 
@@ -356,6 +360,23 @@ if (!isValidMimeType(docType, req.file.mimetype)) {
     }
     if (employee.locked) {
       return res.status(403).json({ message: 'Edição bloqueada.' });
+    }
+
+     if (!isValidMimeType(documentType, req.file.mimetype)) {
+      // Remove do Cloudinary o arquivo que o multer já subiu
+      if (req.file.filename) {
+        const resourceType =
+          req.file.mimetype === 'application/pdf' ? 'raw' : 'image';
+        await cloudinary.uploader
+          .destroy(req.file.filename, { resource_type: resourceType })
+          .catch(() => {});
+      }
+      const accepted = getAcceptedFormats(documentType);
+      return res.status(400).json({
+        message: `Formato inválido para "${getLabelByType(documentType)}". Aceito(s): ${accepted
+          .join(', ')
+          .toUpperCase()}.`,
+      });
     }
 
     // Remove documento anterior do mesmo tipo (substituição)
