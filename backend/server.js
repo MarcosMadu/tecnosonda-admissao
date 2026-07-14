@@ -13,6 +13,8 @@ const errorHandler = require('./middleware/errorHandler');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const admissionRoutes = require('./routes/admission');
+const talentRoutes = require('./routes/talent');
+const vagasRoutes = require('./routes/vagas');
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/admission', admissionRoutes);
+app.use('/api/talent', talentRoutes);   // Banco de Talentos (painel RH)
+app.use('/api/vagas', vagasRoutes);     // Portal público de vagas
 
 // Frontend estático
 const frontendPath = path.join(__dirname, '..', 'frontend');
@@ -48,6 +52,12 @@ app.get('/admin/dashboard', (req, res) => {
 });
 app.get('/admissao/:token', (req, res) => {
   res.sendFile(path.join(frontendPath, 'pages', 'admissao.html'));
+});
+app.get('/admin/talentos', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'pages', 'admin-talentos.html'));
+});
+app.get('/vagas', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'pages', 'vagas.html'));
 });
 
 
