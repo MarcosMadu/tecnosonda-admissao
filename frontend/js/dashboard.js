@@ -11,7 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
   loadEmployees();
 
   document.getElementById('btnLogout').addEventListener('click', logout);
-  document.getElementById('btnNewEmployee').addEventListener('click', openNewEmployeeModal);
+  document.getElementById('btnNewEmployee').addEventListener('click', () => openNewEmployeeModal());
+
+  // Vindo do Banco de Talentos: /admin/dashboard?novo=1&nome=...&funcao=...
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('novo') === '1') {
+    openNewEmployeeModal({
+      name: params.get('nome') || '',
+      funcao: params.get('funcao') || '',
+    });
+    window.history.replaceState({}, '', '/admin/dashboard');
+  }
   document.getElementById('btnRefresh').addEventListener('click', loadEmployees);
   document.getElementById('searchInput').addEventListener('input', renderTable);
   document.getElementById('statusFilter').addEventListener('change', renderTable);
@@ -147,7 +157,8 @@ function renderTable() {
 }
 
 /* ===== Novo colaborador ===== */
-function openNewEmployeeModal() {
+function openNewEmployeeModal(prefill = {}) {
+  const user = JSON.parse(localStorage.getItem('admin_user') || '{}');
   const m = Modal.open(`
     <div class="modal-header">
       <div class="modal-title">Cadastrar Novo Colaborador</div>
@@ -158,13 +169,20 @@ function openNewEmployeeModal() {
         <p class="text-sm text-muted mb-4">
           Preencha os dados básicos. Será gerado um link único de acesso para o colaborador.
         </p>
+        ${prefill.funcao ? `
+          <div class="access-link-box" style="margin-bottom:16px;">
+            <div style="font-size:0.75rem; color:var(--primary-dark); font-weight:600;">BANCO DE TALENTOS</div>
+            <code>Candidato aprovado para a vaga de ${escapeHtml(prefill.funcao)}</code>
+          </div>` : ''}
         <div class="form-group">
           <label class="form-label">Nome <span class="required">*</span></label>
-          <input type="text" name="name" class="form-input" required placeholder="Nome completo do colaborador" />
+          <input type="text" name="name" class="form-input" required placeholder="Nome completo do colaborador"
+            value="${escapeHtml(prefill.name || '')}" />
         </div>
         <div class="form-group">
           <label class="form-label">Responsável pela admissão <span class="required">*</span></label>
-          <input type="text" name="responsavelAdmissao" class="form-input" required placeholder="Nome do responsável (RH)" />
+          <input type="text" name="responsavelAdmissao" class="form-input" required placeholder="Nome do responsável (RH)"
+            value="${escapeHtml(prefill.name ? (user.name || '') : '')}" />
         </div>
         <div class="form-group">
           <label class="form-label">Contrato <span class="required">*</span></label>
