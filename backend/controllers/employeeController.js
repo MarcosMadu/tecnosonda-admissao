@@ -282,9 +282,12 @@ exports.getByToken = async (req, res, next) => {
         name: employee.name,
         responsavelAdmissao: employee.responsavelAdmissao,
         contrato: employee.contrato,
-        cpf: employee.cpf,
         fullName: employee.fullName,
         funcao: employee.funcao,
+        tamanhoUniforme: employee.tamanhoUniforme,
+        tamanhoBota: employee.tamanhoBota,
+        // Legados — retornados apenas para exibição de registros históricos.
+        cpf: employee.cpf,
         dataNascimento: employee.dataNascimento,
         documents: employee.documents.map((d) => ({
           _id: d._id,
@@ -320,10 +323,13 @@ exports.savePersonalData = async (req, res, next) => {
         .json({ message: 'Documentação já enviada. Edição bloqueada.' });
     }
 
-    const { cpf, fullName, funcao, dataNascimento } = req.body;
-    if (cpf !== undefined) employee.cpf = cpf.trim();
+    const { fullName, funcao, tamanhoUniforme, tamanhoBota, cpf, dataNascimento } = req.body;
     if (fullName !== undefined) employee.fullName = fullName.trim();
     if (funcao !== undefined) employee.funcao = funcao.trim();
+    if (tamanhoUniforme !== undefined) employee.tamanhoUniforme = tamanhoUniforme.trim();
+    if (tamanhoBota !== undefined) employee.tamanhoBota = tamanhoBota.trim();
+    // Campos legados: ainda aceitos se enviados, mas não exigidos.
+    if (cpf !== undefined) employee.cpf = cpf.trim();
     if (dataNascimento) employee.dataNascimento = new Date(dataNascimento);
 
     await employee.save();
@@ -467,8 +473,8 @@ exports.submit = async (req, res, next) => {
       return res.status(403).json({ message: 'Documentação já enviada.' });
     }
 
-    // Valida dados pessoais
-    if (!employee.cpf || !employee.fullName || !employee.funcao || !employee.dataNascimento) {
+    // Valida dados pessoais (CPF e data de nascimento não são mais exigidos)
+    if (!employee.fullName || !employee.funcao || !employee.tamanhoUniforme || !employee.tamanhoBota) {
       return res.status(400).json({
         message: 'Preencha todos os dados pessoais antes de enviar.',
       });

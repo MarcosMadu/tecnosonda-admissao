@@ -43,9 +43,14 @@ const employeeSchema = new mongoose.Schema(
     },
 
     // Dados preenchidos pelo colaborador
-    cpf: { type: String, trim: true },
     fullName: { type: String, trim: true },
     funcao: { type: String, trim: true },
+    tamanhoUniforme: { type: String, trim: true },
+    tamanhoBota: { type: String, trim: true },
+
+    // Campos legados — mantidos apenas para preservar dados históricos.
+    // Não são mais exigidos nem coletados no novo fluxo de admissão.
+    cpf: { type: String, trim: true },
     dataNascimento: { type: Date },
 
     // Documentos

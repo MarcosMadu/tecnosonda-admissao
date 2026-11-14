@@ -2,7 +2,6 @@
 const REQUIRED_DOCUMENTS = [
   { type: 'foto_3x4', label: 'Foto 3x4', acceptedFormats: ['jpg', 'jpeg', 'png', 'pdf'] },
   { type: 'ctps', label: 'CTPS', acceptedFormats: ['pdf'] },
-  { type: 'cpf_cin', label: 'CPF/CIN', acceptedFormats: ['pdf'] },
   { type: 'rg', label: 'RG', acceptedFormats: ['pdf'] },
   { type: 'titulo_eleitor', label: 'Título de Eleitor', acceptedFormats: ['pdf'] },
   { type: 'comprovante_endereco', label: 'Comprovante de Endereço', acceptedFormats: ['pdf'] },
@@ -24,9 +23,20 @@ const OPTIONAL_DOCUMENTS = [
 
 const ALL_DOCUMENTS = [...REQUIRED_DOCUMENTS, ...OPTIONAL_DOCUMENTS];
 
+// Documentos descontinuados que NÃO são mais solicitados no formulário,
+// mas podem existir em registros antigos no MongoDB. Mantemos o rótulo
+// para que a visualização de detalhes do RH continue legível e sem erros.
+const LEGACY_LABELS = {
+  cpf_cin: 'CPF/CIN',
+  bilhete_unico: 'Bilhete Único',
+  atestado_medico: 'Atestado Médico Admissional',
+};
+
 const getLabelByType = (type) => {
   const doc = ALL_DOCUMENTS.find((d) => d.type === type);
-  return doc ? doc.label : type;
+  if (doc) return doc.label;
+  if (LEGACY_LABELS[type]) return LEGACY_LABELS[type];
+  return type;
 };
 
 const getAcceptedFormats = (type) => {

@@ -401,7 +401,7 @@ async function downloadCurriculo(candidateId, button) {
     }
 
     const token = localStorage.getItem('admin_token');
-    const response = await fetch(`/api/talent/candidates/${candidateId}/curriculo/download`, {
+    const response = await fetch(apiUrl(`/api/talent/candidates/${candidateId}/curriculo/download`), {
       method: 'GET',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });

@@ -42,7 +42,7 @@ function logout() {
 
 async function loadEmployees() {
   const tbody = document.getElementById('employeesTbody');
-  tbody.innerHTML = `<tr><td colspan="7" style="padding:40px; text-align:center; color:var(--gray-600);">Carregando...</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="8" style="padding:40px; text-align:center; color:var(--gray-600);">Carregando...</td></tr>`;
   try {
     const data = await Api.get('/admin/employees');
     allEmployees = data.employees || [];
@@ -50,7 +50,7 @@ async function loadEmployees() {
     renderTable();
   } catch (err) {
     Toast.error(err.message);
-    tbody.innerHTML = `<tr><td colspan="7" style="padding:40px; text-align:center; color:var(--danger);">Falha ao carregar.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="padding:40px; text-align:center; color:var(--danger);">Falha ao carregar.</td></tr>`;
   }
 }
 
@@ -111,7 +111,7 @@ function renderTable() {
   const tbody = document.getElementById('employeesTbody');
   if (list.length === 0) {
     tbody.innerHTML = `
-      <tr><td colspan="7">
+      <tr><td colspan="8">
         <div class="empty-state">
           <div class="empty-state-icon">📭</div>
           <h4 style="margin-bottom:6px;">Nenhum colaborador encontrado</h4>
@@ -133,6 +133,7 @@ function renderTable() {
         </div>
       </td>
       <td>${escapeHtml(emp.contrato)}</td>
+      <td>${emp.funcao ? escapeHtml(emp.funcao) : '<span class="text-muted">Não informado</span>'}</td>
       <td>${escapeHtml(emp.responsavelAdmissao)}</td>
       <td><code style="font-family:'Courier New',monospace; font-size:0.8125rem; background:var(--gray-100); padding:3px 8px; border-radius:4px;">${escapeHtml(emp.accessToken)}</code></td>
       <td>${statusBadge(emp.status)}</td>
@@ -280,6 +281,26 @@ function renderDetailsModal(data) {
   const { employee, accessLink, requiredDocuments, optionalDocuments } = data;
   const uploadedTypes = employee.documents.map(d => d.type);
 
+  // Documentos enviados que não pertencem mais ao catálogo atual
+  // (ex.: CPF/CIN de admissões antigas). Preservados para download.
+  const catalogTypes = new Set(
+    [...requiredDocuments, ...optionalDocuments].map(d => d.type)
+  );
+  const legacyDocs = employee.documents.filter(d => !catalogTypes.has(d.type));
+
+  const legacyHtml = legacyDocs.map(uploaded => `
+        <div class="doc-row">
+          <div class="doc-row-icon">📄</div>
+          <div class="doc-row-info">
+            <div class="doc-row-label">${escapeHtml(uploaded.label || uploaded.type)} <span class="optional-tag">histórico</span></div>
+            <div class="doc-row-meta">${escapeHtml(uploaded.originalName || '')} • ${formatDate(uploaded.uploadedAt)}</div>
+          </div>
+          <div class="doc-row-actions">
+            <button type="button" class="btn btn-secondary btn-sm" data-doc-download="${uploaded._id}">⬇ Baixar</button>
+            <button class="btn-icon btn-ghost" data-doc-delete="${uploaded._id}" title="Excluir documento">🗑️</button>
+          </div>
+        </div>`).join('');
+
   const docHtml = (catalog, isRequired) => catalog.map(catDoc => {
     const uploaded = employee.documents.find(d => d.type === catDoc.type);
     if (uploaded) {
@@ -343,11 +364,13 @@ function renderDetailsModal(data) {
       <h4 style="margin-bottom:12px;">Dados Pessoais</h4>
       <div class="detail-grid">
         <div class="detail-item"><span class="detail-label">Nome completo</span><span class="detail-value">${escapeHtml(employee.fullName || '—')}</span></div>
-        <div class="detail-item"><span class="detail-label">CPF</span><span class="detail-value">${escapeHtml(employee.cpf || '—')}</span></div>
         <div class="detail-item"><span class="detail-label">Função</span><span class="detail-value">${escapeHtml(employee.funcao || '—')}</span></div>
-        <div class="detail-item"><span class="detail-label">Data de Nascimento</span><span class="detail-value">${formatDateOnly(employee.dataNascimento)}</span></div>
+        <div class="detail-item"><span class="detail-label">Tamanho do uniforme</span><span class="detail-value">${escapeHtml(employee.tamanhoUniforme || '—')}</span></div>
+        <div class="detail-item"><span class="detail-label">Tamanho da bota</span><span class="detail-value">${escapeHtml(employee.tamanhoBota || '—')}</span></div>
         <div class="detail-item"><span class="detail-label">Cadastrado em</span><span class="detail-value">${formatDate(employee.createdAt)}</span></div>
         <div class="detail-item"><span class="detail-label">Enviado em</span><span class="detail-value">${employee.submittedAt ? formatDate(employee.submittedAt) : '—'}</span></div>
+        ${employee.cpf ? `<div class="detail-item"><span class="detail-label">CPF (histórico)</span><span class="detail-value">${escapeHtml(employee.cpf)}</span></div>` : ''}
+        ${employee.dataNascimento ? `<div class="detail-item"><span class="detail-label">Nascimento (histórico)</span><span class="detail-value">${formatDateOnly(employee.dataNascimento)}</span></div>` : ''}
       </div>
 
       <div class="docs-section">
@@ -362,6 +385,15 @@ function renderDetailsModal(data) {
         <div class="docs-section-title">Documentos Opcionais</div>
         ${docHtml(optionalDocuments, false)}
       </div>
+
+      ${legacyDocs.length ? `
+      <div class="docs-section" style="margin-top:20px;">
+        <div class="docs-section-title">
+          Outros documentos (histórico)
+          <span class="text-sm text-muted">${legacyDocs.length}</span>
+        </div>
+        ${legacyHtml}
+      </div>` : ''}
     </div>
     <div class="modal-footer">
       <button class="btn btn-danger" data-action="delete" style="margin-right:auto;">Excluir cadastro</button>
@@ -476,7 +508,7 @@ async function downloadDocument(employeeId, docId, button) {
     }
 
     const token = localStorage.getItem('admin_token');
-    const response = await fetch(`/api/admin/employees/${employeeId}/documents/${docId}/download`, {
+    const response = await fetch(apiUrl(`/api/admin/employees/${employeeId}/documents/${docId}/download`), {
       method: 'GET',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });

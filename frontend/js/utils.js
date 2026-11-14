@@ -1,6 +1,13 @@
 /* ================== UTILITIES ================== */
 
-const API_BASE = '/api';
+// Origem do backend definida em config.js (vazia em local, Render em produção).
+const API_ORIGIN = (typeof window !== 'undefined' && window.API_ORIGIN) || '';
+const API_BASE = API_ORIGIN + '/api';
+
+// Fallback caso config.js não tenha sido carregado antes deste arquivo.
+if (typeof window !== 'undefined' && typeof window.apiUrl !== 'function') {
+  window.apiUrl = function (path) { return API_ORIGIN + (path || ''); };
+}
 
 const Toast = {
   show(message, type = 'info', duration = 4000) {

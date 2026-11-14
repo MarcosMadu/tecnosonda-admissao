@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadAdmission() {
   try {
-    const data = await fetch(`/api/admission/${token}`).then(r => r.json().then(j => ({ ok: r.ok, j })));
+    const data = await fetch(apiUrl(`/api/admission/${token}`)).then(r => r.json().then(j => ({ ok: r.ok, j })));
     if (!data.ok) throw new Error(data.j.message || 'Token inválido');
     state.employee = data.j.employee;
     state.requiredDocuments = data.j.requiredDocuments;
@@ -52,8 +52,9 @@ function render() {
           <h3 style="margin-bottom:16px;">Resumo do envio</h3>
           <div class="detail-grid">
             <div class="detail-item"><span class="detail-label">Nome</span><span class="detail-value">${escapeHtml(emp.fullName || emp.name)}</span></div>
-            <div class="detail-item"><span class="detail-label">CPF</span><span class="detail-value">${escapeHtml(emp.cpf || '-')}</span></div>
             <div class="detail-item"><span class="detail-label">Função</span><span class="detail-value">${escapeHtml(emp.funcao || '-')}</span></div>
+            <div class="detail-item"><span class="detail-label">Tamanho do uniforme</span><span class="detail-value">${escapeHtml(emp.tamanhoUniforme || '-')}</span></div>
+            <div class="detail-item"><span class="detail-label">Tamanho da bota</span><span class="detail-value">${escapeHtml(emp.tamanhoBota || '-')}</span></div>
             <div class="detail-item"><span class="detail-label">Documentos enviados</span><span class="detail-value">${emp.documents.length}</span></div>
           </div>
         </div>
@@ -95,10 +96,6 @@ function render() {
       <div class="section-body">
         <div class="field-grid">
           <div class="form-group">
-            <label class="form-label">CPF <span class="required">*</span></label>
-            <input type="text" id="fCpf" class="form-input" maxlength="14" value="${escapeHtml(emp.cpf || '')}" placeholder="000.000.000-00" />
-          </div>
-          <div class="form-group">
             <label class="form-label">Nome Completo <span class="required">*</span></label>
             <input type="text" id="fName" class="form-input" value="${escapeHtml(emp.fullName || '')}" placeholder="Nome completo" />
           </div>
@@ -107,8 +104,12 @@ function render() {
             <input type="text" id="fFuncao" class="form-input" value="${escapeHtml(emp.funcao || '')}" placeholder="Cargo / função" />
           </div>
           <div class="form-group">
-            <label class="form-label">Data de Nascimento <span class="required">*</span></label>
-            <input type="date" id="fDob" class="form-input" value="${formatDateInput(emp.dataNascimento)}" />
+            <label class="form-label">Tamanho do uniforme <span class="required">*</span></label>
+            <input type="text" id="fUniforme" class="form-input" maxlength="10" value="${escapeHtml(emp.tamanhoUniforme || '')}" placeholder="Ex.: P, M, G, GG, 42..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tamanho da bota <span class="required">*</span></label>
+            <input type="text" id="fBota" class="form-input" maxlength="10" value="${escapeHtml(emp.tamanhoBota || '')}" placeholder="Ex.: 38, 39, 40..." />
           </div>
         </div>
       </div>
@@ -158,11 +159,7 @@ function render() {
 
 /* ===== Dados pessoais ===== */
 function attachPersonalDataListeners() {
-  const fields = ['fCpf', 'fName', 'fFuncao', 'fDob'];
-  const cpfInput = document.getElementById('fCpf');
-  cpfInput.addEventListener('input', e => {
-    e.target.value = formatCPF(e.target.value);
-  });
+  const fields = ['fName', 'fFuncao', 'fUniforme', 'fBota'];
   fields.forEach(id => {
     document.getElementById(id).addEventListener('input', () => {
       clearTimeout(debounceTimers.personal);
@@ -174,10 +171,10 @@ function attachPersonalDataListeners() {
 
 async function savePersonalData() {
   const data = {
-    cpf: document.getElementById('fCpf').value.trim(),
     fullName: document.getElementById('fName').value.trim(),
     funcao: document.getElementById('fFuncao').value.trim(),
-    dataNascimento: document.getElementById('fDob').value || null,
+    tamanhoUniforme: document.getElementById('fUniforme').value.trim(),
+    tamanhoBota: document.getElementById('fBota').value.trim(),
   };
   try {
     const res = await Api.put(`/admission/${token}/personal-data`, data);
@@ -311,19 +308,19 @@ function updateProgress() {
   ).length;
 
   const personalOk = !!(
-    document.getElementById('fCpf')?.value.trim() &&
     document.getElementById('fName')?.value.trim() &&
     document.getElementById('fFuncao')?.value.trim() &&
-    document.getElementById('fDob')?.value
+    document.getElementById('fUniforme')?.value.trim() &&
+    document.getElementById('fBota')?.value.trim()
   );
 
   const totalSteps = total + 4; // 4 campos pessoais
   const completedSteps =
     uploadedRequired +
-    (document.getElementById('fCpf')?.value.trim() ? 1 : 0) +
     (document.getElementById('fName')?.value.trim() ? 1 : 0) +
     (document.getElementById('fFuncao')?.value.trim() ? 1 : 0) +
-    (document.getElementById('fDob')?.value ? 1 : 0);
+    (document.getElementById('fUniforme')?.value.trim() ? 1 : 0) +
+    (document.getElementById('fBota')?.value.trim() ? 1 : 0);
 
   const percent = Math.round((completedSteps / totalSteps) * 100);
 
