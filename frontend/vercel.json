@@ -1,9 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/pages/index.html" },
     { "source": "/admin/login", "destination": "/pages/admin-login.html" },
     { "source": "/admin/dashboard", "destination": "/pages/admin-dashboard.html" },
     { "source": "/admin/talentos", "destination": "/pages/admin-talentos.html" },
